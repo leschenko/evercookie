@@ -610,7 +610,7 @@ var <%= Evercookie.js_class %> = (function (window) {
         };
 
         this.getHost = function () {
-            return window.location.host.replace(/:\d+/, '');
+            return '<%= Evercookie.host_url %>';
         };
 
         this.toHex = function (str) {

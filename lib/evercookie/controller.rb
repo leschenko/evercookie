@@ -44,6 +44,8 @@ module Evercookie
   # controller class defines evercookie actions
   class EvercookieController < ::ActionController::Base
 
+    before_action :allow_unrestricted_access
+
     # Renders javascript with evercookie set script
     def set
       @data = session[Evercookie.hash_name_for_set] || {key: '', value: ''}
@@ -68,7 +70,7 @@ module Evercookie
     # Renders png image with encoded evercookie value in it
     def ec_png
       if not cookies[Evercookie.cookie_png].present?
-        render :nothing => true, :status => 304
+        render :nothing => true
         return true
       end
 
@@ -83,7 +85,7 @@ module Evercookie
     # Renders page with etag header for evercookie js script
     def ec_etag
       if not cookies[Evercookie.cookie_etag].present?
-        render :text => request.headers['If-None-Match'] || '', :status => 304
+        render :text => request.headers['If-None-Match'] || ''
         return true
       end
 
@@ -94,7 +96,7 @@ module Evercookie
     # Renders page with cache header for evercookie js script
     def ec_cache
       if not cookies[Evercookie.cookie_cache].present?
-        render :nothing => true, :status => 304
+        render :nothing => true
         return true
       end
 
@@ -107,6 +109,10 @@ module Evercookie
     end
 
     private
+    def allow_unrestricted_access
+      headers['Access-Control-Allow-Origin'] = '*'
+    end
+
     def get_blob_png
       value = cookies[Evercookie.cookie_png]
 
