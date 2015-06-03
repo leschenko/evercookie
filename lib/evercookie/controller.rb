@@ -110,7 +110,8 @@ module Evercookie
 
     private
     def allow_unrestricted_access
-      headers['Access-Control-Allow-Origin'] = '*'
+      response.headers['Access-Control-Allow-Origin'] = '*'
+      response.headers['Access-Control-Allow-Methods'] = '*'
     end
 
     def get_blob_png
