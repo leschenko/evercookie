@@ -2,5 +2,8 @@
 //=require 'evercookie/evercookie'
 
 if (typeof(WWAnalytics.init) == "function") {
-  WWAnalytics.init();
+    if (WWAnalytics.init_started != true) {
+        WWAnalytics.init();
+    }
+    WWAnalytics.init_started = true;
 }
