@@ -56,7 +56,8 @@ var <%= Evercookie.js_class %> = (function (window) {
         // private property
         var self = this,
                 _baseKeyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
-                no_color = -1;
+                no_color = -1,
+                ec_domain = '.' + window.location.host.replace(/:\d+/, '');
         this._ec = {};
 
         this.get = function (name, cb, dont_reset) {
@@ -156,7 +157,7 @@ var <%= Evercookie.js_class %> = (function (window) {
                     }
 
                     self.ajax({
-                        url: "<%= Evercookie.get_save_path %>?name=" + name,
+                        url: this.full_url("<%= Evercookie.get_save_path %>", {name: name}),
                         success: function (data) { }
                     });
                 }
@@ -234,21 +235,21 @@ var <%= Evercookie.js_class %> = (function (window) {
         this.<%= Evercookie.js_class %>_cache = function (name, value) {
             if (value !== undefined) {
                 // make sure we have <%= Evercookie.js_class %> session defined first
-                document.cookie = "<%= Evercookie.cookie_cache %>=" + value + "; path=<%= Evercookie.get_cookie_path %>";
+                document.cookie = "<%= Evercookie.cookie_cache %>=" + value + "; path=/; domain=" + ec_domain;
                 // <%= Evercookie.get_cache_path %> handles caching
-                newImage("<%= Evercookie.get_cache_path %>?name=" + name);
+                newImage(this.full_url("<%= Evercookie.get_cache_path %>", {name: name}));
             } else {
                 // interestingly enough, we want to erase our evercookie
                 // http cookie so will force a cached response
                 var origvalue = this.getFromStr("<%= Evercookie.cookie_cache %>", document.cookie);
                 self._ec.cacheData = undefined;
-                document.cookie = "<%= Evercookie.cookie_cache %>=; expires=Mon, 20 Sep 2010 00:00:00 UTC; path=<%= Evercookie.get_cookie_path %>";
 
+                document.cookie = "<%= Evercookie.cookie_cache %>=; expires=Mon, 20 Sep 2010 00:00:00 UTC; path=/; domain=" + ec_domain;
                 self.ajax({
-                    url: "<%= Evercookie.get_cache_path %>?name=" + name,
+                    url: this.full_url("<%= Evercookie.get_cache_path %>", {name: name}),
                     success: function (data) {
                         // put our cookie back
-                        document.cookie = "<%= Evercookie.cookie_cache %>=" + origvalue + "; expires=Tue, 31 Dec 2030 00:00:00 UTC; path=<%= Evercookie.get_cookie_path %>";
+                        document.cookie = "<%= Evercookie.cookie_cache %>=" + origvalue + "; expires=Tue, 31 Dec 2030 00:00:00 UTC; path=/; domain=" + ec_domain;
 
                         self._ec.cacheData = data;
                     }
@@ -259,21 +260,21 @@ var <%= Evercookie.js_class %> = (function (window) {
         this.<%= Evercookie.js_class %>_etag = function (name, value) {
             if (value !== undefined) {
                 // make sure we have <%= Evercookie.js_class %> session defined first
-                document.cookie = "<%= Evercookie.cookie_etag %>=" + value + "; path=<%= Evercookie.get_cookie_path %>";
+                document.cookie = "<%= Evercookie.cookie_etag %>=" + value + "; path=/; domain=" + ec_domain;
                 // <%= Evercookie.get_etag_path %> handles etagging
-                newImage("<%= Evercookie.get_etag_path %>?name=" + name);
+                newImage(this.full_url("<%= Evercookie.get_etag_path %>", {name: name}));
             } else {
                 // interestingly enough, we want to erase our <%= Evercookie.js_class %>
                 // http cookie so will force a cached response
                 var origvalue = this.getFromStr("<%= Evercookie.cookie_etag %>", document.cookie);
                 self._ec.etagData = undefined;
-                document.cookie = "<%= Evercookie.cookie_etag %>=; expires=Mon, 20 Sep 2010 00:00:00 UTC; path=<%= Evercookie.get_cookie_path %>";
+                document.cookie = "<%= Evercookie.cookie_etag %>=; expires=Mon, 20 Sep 2010 00:00:00 UTC; path=/; domain=" + ec_domain;
 
                 self.ajax({
-                    url: "<%= Evercookie.get_etag_path %>?name=" + name,
+                    url: this.full_url("<%= Evercookie.get_etag_path %>", {name: name}),
                     success: function (data) {
                         // put our cookie back
-                        document.cookie = "<%= Evercookie.cookie_etag %>=" + origvalue + "; expires=Tue, 31 Dec 2030 00:00:00 UTC; path=<%= Evercookie.get_cookie_path %>";
+                        document.cookie = "<%= Evercookie.cookie_etag %>=" + origvalue + "; expires=Tue, 31 Dec 2030 00:00:00 UTC; path=/; domain=" + ec_domain;
 
                         self._ec.etagData = data;
                     }
@@ -314,9 +315,10 @@ var <%= Evercookie.js_class %> = (function (window) {
                 img = new Image();
                 img.style.visibility = "hidden";
                 img.style.position = "absolute";
+                img.crossOrigin = "Anonymous";
                 if (value !== undefined) {
                     // make sure we have <%= Evercookie.js_class %> session defined first
-                    document.cookie = "<%= Evercookie.cookie_png %>=" + value + "; path=<%= Evercookie.get_cookie_path %>";
+                    document.cookie = "<%= Evercookie.cookie_png %>=" + value + "; path=/; domain=" + ec_domain;;
                 } else {
                     self._ec.pngData = undefined;
                     ctx = canvas.getContext("2d");
@@ -324,11 +326,11 @@ var <%= Evercookie.js_class %> = (function (window) {
                     // interestingly enough, we want to erase our <%= Evercookie.js_class %>
                     // http cookie so will force a cached response
                     origvalue = this.getFromStr("<%= Evercookie.cookie_png %>", document.cookie);
-                    document.cookie = "<%= Evercookie.cookie_png %>=; expires=Mon, 20 Sep 2010 00:00:00 UTC; path=<%= Evercookie.get_cookie_path %>";
+                    document.cookie = "<%= Evercookie.cookie_png %>=; expires=Mon, 20 Sep 2010 00:00:00 UTC; path=/; domain=" + ec_domain;
 
                     img.onload = function () {
                         // put our cookie back
-                        document.cookie = "<%= Evercookie.cookie_png %>=" + origvalue + "; expires=Tue, 31 Dec 2030 00:00:00 UTC; path=<%= Evercookie.get_cookie_path %>";
+                        document.cookie = "<%= Evercookie.cookie_png %>=" + origvalue + "; expires=Tue, 31 Dec 2030 00:00:00 UTC; path=/; domain=" + ec_domain;
 
                         self._ec.pngData = "";
                         ctx.drawImage(img, 0, 0);
@@ -354,9 +356,13 @@ var <%= Evercookie.js_class %> = (function (window) {
                         }
                     };
                 }
-                img.src = "<%= Evercookie.get_png_path %>?name=" + name;
+                img.src = this.full_url("<%= Evercookie.get_png_path %>", {name: name});
             }
         };
+
+        this.full_url = function(path, params) {
+            return this.getHost() + path + '?' + $.param(params)
+        }
 
         this.<%= Evercookie.js_class %>_local_storage = function (name, value) {
             try {
@@ -583,8 +589,8 @@ var <%= Evercookie.js_class %> = (function (window) {
         this.<%= Evercookie.js_class %>_cookie = function (name, value) {
             if (value !== undefined) {
                 // expire the cookie first
-                document.cookie = name + "=; expires=Mon, 20 Sep 2010 00:00:00 UTC; path=<%= Evercookie.get_cookie_path %>";
-                document.cookie = name + "=" + value + "; expires=Tue, 31 Dec 2030 00:00:00 UTC; path=<%= Evercookie.get_cookie_path %>";
+                document.cookie = name + "=; expires=Mon, 20 Sep 2010 00:00:00 UTC; path=/; domain=" + ec_domain;
+                document.cookie = name + "=" + value + "; expires=Tue, 31 Dec 2030 00:00:00 UTC; path=/; domain=" + ec_domain;
             } else {
                 return this.getFromStr(name, document.cookie);
             }
@@ -610,7 +616,7 @@ var <%= Evercookie.js_class %> = (function (window) {
         };
 
         this.getHost = function () {
-            return '<%= Evercookie.host_url %>';
+            return "<%= Evercookie.host_url %>".replace('http:', window.location.protocol);
         };
 
         this.toHex = function (str) {
