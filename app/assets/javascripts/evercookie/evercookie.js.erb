@@ -299,7 +299,7 @@ var <%= Evercookie.js_class %> = (function (window) {
             params.swliveconnect = "true";
             attributes.id        = "myswf";
             attributes.name      = "myswf";
-            swfobject.embedSWF("<%= asset_path('ec.swf') %>", "swfcontainer", "1", "1", "9.0.0", false, flashvars, params, attributes);
+            swfobject.embedSWF(this.full_url("<%= asset_path('ec.swf', host: '') %>", {}), "swfcontainer", "1", "1", "9.0.0", false, flashvars, params, attributes);
         };
 
         this.<%= Evercookie.js_class %>_png = function (name, value) {
