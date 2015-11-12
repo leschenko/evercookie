@@ -31,7 +31,7 @@ module Evercookie
 
   # name for host url
   mattr_accessor :host_url
-  @@host_url = 'http://www.weddingwire.com/'
+  @@host_url = 'http://www.weddingwire.com'
 
   # default method for setup evercookie
   def self.setup
@@ -45,43 +45,37 @@ module Evercookie
 
   # getter for session key variable for set action
   def self.hash_name_for_set
-    "#{@@host_url}#{@@hash_name}_set".to_sym
+    "#{@@hash_name}_set".to_sym
   end
 
   # getter for session key variable for get action
   def self.hash_name_for_get
-    "#{@@host_url}#{@@hash_name}_get".to_sym
+    "#{@@hash_name}_get".to_sym
   end
 
   # getter for session key variable all stored evercookies
   def self.hash_name_for_saved
-    "#{@@host_url}#{@@hash_name}_saved".to_sym
-  end
-
-  # getter for cookie path in javascript because rails controller actions
-  # get cookies only from it's controller path
-  def self.get_cookie_path
-    "#{@@host_url}#{get_namespace}/"
+    "#{@@hash_name}_saved".to_sym
   end
 
   # getter for path of save action
   def self.get_save_path
-    "#{@@host_url}#{get_namespace}/save"
+    "/#{get_namespace}/save"
   end
 
   # getter for path of cache action
   def self.get_cache_path
-    "#{@@host_url}#{get_namespace}/ec_cache"
+    "/#{get_namespace}/ec_cache"
   end
 
   # getter for path of etag action
   def self.get_etag_path
-    "#{@@host_url}#{get_namespace}/ec_etag"
+    "/#{get_namespace}/ec_etag"
   end
 
   # getter for path of png action
   def self.get_png_path
-    "#{@@host_url}#{get_namespace}/ec_png"
+    "/#{get_namespace}/ec_png"
   end
 end
 
