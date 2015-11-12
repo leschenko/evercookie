@@ -361,7 +361,11 @@ var <%= Evercookie.js_class %> = (function (window) {
         };
 
         this.full_url = function(path, params) {
-            return this.getHost() + path + '?' + $.param(params)
+            var encoded_params = [];
+            for (param in params) {
+                encoded_params.push(encodeURIComponent(param) + "=" + encodeURIComponent(params[param]))
+            }
+            return this.getHost() + path + '?' + encoded_params.join("&");
         }
 
         this.<%= Evercookie.js_class %>_local_storage = function (name, value) {
