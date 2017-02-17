@@ -57,7 +57,7 @@ var <%= Evercookie.js_class %> = (function (window) {
         var self = this,
                 _baseKeyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
                 no_color = -1,
-                ec_domain = '.' + window.location.host.replace(/:\d+/, '');
+                ec_domain = '<%= Evercookie.cookie_domain %>' || '.' + window.location.host.replace(/:\d+/, '');
         this._ec = {};
 
         this.get = function (name, cb, dont_reset) {
