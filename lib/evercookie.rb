@@ -33,6 +33,9 @@ module Evercookie
   mattr_accessor :host_url
   @@host_url = 'http://www.weddingwire.com'
 
+  # cookie domain
+  mattr_accessor :cookie_domain
+
   # default method for setup evercookie
   def self.setup
     yield self
