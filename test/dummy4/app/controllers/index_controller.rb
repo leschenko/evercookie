@@ -14,11 +14,11 @@ class IndexController < ApplicationController
   end
 
   def get_controller
-    render text: "cookie value: #{evercookie_get_value(params[:ec_name])}"
+    render plain: "cookie value: #{evercookie_get_value(params[:ec_name])}"
   end
 
   def get_defined
-    render text: "cookie present?: #{evercookie_is_set?(params[:ec_name]).to_s}"
+    render plain: "cookie present?: #{evercookie_is_set?(params[:ec_name]).to_s}"
   end
 
 end
