@@ -64,13 +64,13 @@ module Evercookie
               { data[:key] => cookies[data[:key]] }
         end
       end
-      render nothing: true
+      head :ok
     end
 
     # Renders png image with encoded evercookie value in it
     def ec_png
       if not cookies[Evercookie.cookie_png].present?
-        render :nothing => true
+        head :ok
         return true
       end
 
@@ -96,7 +96,7 @@ module Evercookie
     # Renders page with cache header for evercookie js script
     def ec_cache
       if not cookies[Evercookie.cookie_cache].present?
-        render :nothing => true
+        head :ok
         return true
       end
 
